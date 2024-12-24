@@ -121,6 +121,10 @@ class ExpandableTable extends StatefulWidget {
   ///       rows: rows,
   ///     );
   /// ```
+
+  /// Callback to notify when the horizontal body scroll controller is initialized
+  final Function(ScrollController)? onHorizontalBodyControllerInitialized;
+
   const ExpandableTable({
     super.key,
     this.firstHeaderCell,
@@ -141,6 +145,7 @@ class ExpandableTable extends StatefulWidget {
     this.trackVisibilityScrollbar,
     this.thumbVisibilityScrollbar,
     this.expanded = true,
+    this.onHorizontalBodyControllerInitialized,
   }) : assert(((firstHeaderCell != null && rows != null && headers != null) ||
                 controller != null) &&
             !(thumbVisibilityScrollbar == false &&
@@ -171,7 +176,10 @@ class _ExpandableTableState extends State<ExpandableTable> {
   Widget build(BuildContext context) => widget.controller != null
       ? ChangeNotifierProvider<ExpandableTableController>.value(
           value: widget.controller!,
-          builder: (context, child) => const InternalTable(),
+          builder: (context, child) => InternalTable(
+            onHorizontalBodyControllerInitialized:
+                widget.onHorizontalBodyControllerInitialized,
+          ),
         )
       : ChangeNotifierProvider<ExpandableTableController>(
           create: (context) => ExpandableTableController(
@@ -194,6 +202,9 @@ class _ExpandableTableState extends State<ExpandableTable> {
             thumbVisibilityScrollbar: widget.thumbVisibilityScrollbar,
             expanded: widget.expanded,
           ),
-          builder: (context, child) => const InternalTable(),
+          builder: (context, child) => InternalTable(
+            onHorizontalBodyControllerInitialized:
+                widget.onHorizontalBodyControllerInitialized,
+          ),
         );
 }

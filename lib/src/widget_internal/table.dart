@@ -12,9 +12,13 @@ import 'package:flutter_expandable_table/src/widget_internal/cell.dart';
 
 /// [InternalTable] it is the widget that builds the table.
 class InternalTable extends StatefulWidget {
-  /// [InternalTable] constructor.
+  /// Callback to notify when the horizontal body scroll controller is initialized
+  final Function(ScrollController)? onHorizontalBodyControllerInitialized;
+
+  /// [InternalTable] constructor
   const InternalTable({
     super.key,
+    this.onHorizontalBodyControllerInitialized,
   });
 
   @override
@@ -39,6 +43,11 @@ class InternalTableState extends State<InternalTable> {
     _verticalLinkedControllers = LinkedScrollControllerGroup();
     _firstColumnController = _verticalLinkedControllers.addAndGet();
     _restColumnsController = _verticalLinkedControllers.addAndGet();
+
+    // Notify parent about the horizontal body controller
+    if (widget.onHorizontalBodyControllerInitialized != null) {
+      widget.onHorizontalBodyControllerInitialized!(_horizontalBodyController);
+    }
   }
 
   @override
