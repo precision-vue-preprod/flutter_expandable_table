@@ -82,13 +82,16 @@ class InternalTableState extends State<InternalTable> {
       return Row(
         children: row.cells!
             .map(
-              (cell) => ExpandableTableCellWidget(
-                header: data.allHeaders[row.cells!.indexOf(cell)],
-                row: row,
-                height: row.height ?? data.defaultsRowHeight,
-                width: data.allHeaders[row.cells!.indexOf(cell)].width ??
-                    data.defaultsColumnWidth,
-                builder: cell.build,
+              (cell) => Semantics(
+                explicitChildNodes: true,
+                child: ExpandableTableCellWidget(
+                  header: data.allHeaders[row.cells!.indexOf(cell)],
+                  row: row,
+                  height: row.height ?? data.defaultsRowHeight,
+                  width: data.allHeaders[row.cells!.indexOf(cell)].width ??
+                      data.defaultsColumnWidth,
+                  builder: cell.build,
+                ),
               ),
             )
             .toList(),
